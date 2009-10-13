@@ -54,15 +54,15 @@ class SoftRankBoost:
         return - sum( w*(p[1]*2-1) for p, w in izip( probs, weights ) )
 
     def reweight( self, probs, data, modelTrainProbs, modelTrainData, modelTrainWeights, voter ):
-        print >>sys.stderr, "    boosting (SoftRankBoost)"
+        print >>sys.stderr, "  boosting (SoftRankBoost)"
 
         gamma = self.__getGamma( modelTrainProbs, modelTrainData, modelTrainWeights )
         self.__gammaHat = min( self.__gammaHat, (1-self.__delta)*gamma )
-        print >>sys.stderr, "        weighted error: %f" % (1-(gamma+1)/2.0)
+        print >>sys.stderr, "    weighted error: %f" % (1-(gamma+1)/2.0)
 
         self.__alpha = ( gamma - self.__gammaHat ) / ( 2 * ( 1 + self.__gammaHat ** 2 ) )
         self.__alphaSum += self.__alpha
-        print >>sys.stderr, "        alpha:                    %f" % self.__alpha
+        print >>sys.stderr, "    alpha:                    %f" % self.__alpha
 
 
         self.__b = self.__getBias( modelTrainProbs, modelTrainData, modelTrainWeights )
@@ -108,14 +108,14 @@ class LiftBoost:
     def reweight( self, probs, data, modelprobs, modelTrainData, modelTrainWeights, voter ):
         cutoffThreshold = min( 1.0, 1000.0 / len( data ) )
 
-        print >>sys.stderr, "    boosting"
+        print >>sys.stderr, "  boosting"
         error = self.__getWeightedLiftAsError( modelprobs, modelTrainData, modelTrainWeights )
         #errorMargin = self.__getErrorMarginsAsP1( probs, data )
-        print >>sys.stderr, "        weighted error: %f" % error
+        print >>sys.stderr, "    weighted error: %f" % error
 
         if error > 0.5:
-            print >>sys.stderr, "        oh dear, error too high"
-            print >>sys.stderr, "        alpha:                    %f" % 0.0
+            print >>sys.stderr, "    oh dear, error too high"
+            print >>sys.stderr, "    alpha:                    %f" % 0.0
             self.__alpha = 0.0
             return
 
@@ -123,7 +123,7 @@ class LiftBoost:
             alpha = 5.0
         else:
             alpha = min( 5.0, 0.5 * math.log( (1-error)/error, 2 ) )
-        print >>sys.stderr, "        alpha:                    %f" % alpha
+        print >>sys.stderr, "    alpha:                    %f" % alpha
 
         s = 0.0
         newWeights = []
@@ -167,12 +167,12 @@ class LiftBoost:
         self.__weights = [ w/s for w in newWeights ]
 
         if self.__verbose:
-            dbgDescr = [ 'down', '    up' ]
+            dbgDescr = [ 'down', '  up' ]
             for c in (0,1):
                 for s in (0,1):
-                    print >>sys.stderr, "        class %2d weighted %s: %d" % ( c, dbgDescr[s], dbg[c][s] )
-            print >>sys.stderr,         "        highest weight:                 %f" % ( max( self.__weights ) )
-            print >>sys.stderr,         "        cutting off at:                 %f" % ( cutoffThreshold )
+                    print >>sys.stderr, "    class %2d weighted %s: %d" % ( c, dbgDescr[s], dbg[c][s] )
+            print >>sys.stderr,         "    highest weight:        %f" % ( max( self.__weights ) )
+            print >>sys.stderr,         "    cutting off at:        %f" % ( cutoffThreshold )
 
         modified = 0.0
         for i, w in ( (i,w) for (i,w) in enumerate( self.__weights ) if w > cutoffThreshold ):
@@ -253,16 +253,16 @@ class AdaBoost:
     def reweight( self, probs, data, modelprobs, modelTrainData, modelTrainWeights, voter ):
         print >>sys.stderr, "  boosting"
         error = self.__getWeightedError( modelprobs, modelTrainData, modelTrainWeights )
-        print >>sys.stderr, "    weighted error: %f" % error
+        print >>sys.stderr,     "    weighted error: %f" % error
 
         if error > 0.5:
             print >>sys.stderr, "    oh dear, error too high"
-            print >>sys.stderr, "    alpha:                    %f" % 0.0
+            print >>sys.stderr, "    alpha:          %f" % 0.0
             self.__alpha = 0.0
             return
 
         alpha = 0.5 * math.log( (1-error)/error, 2 )
-        print >>sys.stderr, "    alpha:                    %f" % alpha
+        print >>sys.stderr,     "    alpha:          %f" % alpha
 
         s = 0.0
         newWeights = []
