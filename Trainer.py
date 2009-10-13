@@ -20,11 +20,20 @@ Created by jan on 2009-06-04.
 
 import sys
 import random
+import gzip
 from itertools import izip, imap, count
 from collections import defaultdict
 
 from Boosters import NoBoost
 from FeatureSampler import NoFeatureSampler
+
+def myOpen(fn, mode):
+    if fn.endswith('.gz'):
+        return gzip.open(fn, mode)
+    else:
+        return _open(fn, mode)
+_open = open
+open = myOpen
 
 class Voter:
     def __init__( self, classCount, dataCount ):
@@ -232,12 +241,13 @@ class Trainer:
                 print >>fp, ' '.join( [ "%.6f" % p for p in ps ] )
             fp.close()
 
-        print >>sys.stderr, "dumping trainprobs to %s" % self.__trainprobsfile
-        probs = self.__trainVotes.getProbs()
-        fp = open( self.__trainprobsfile, 'w' )
-        for ps in probs:
-            print >>fp, ' '.join( [ "%.6f" % p for p in ps ] )
-        fp.close()
+        if self.__trainprobsfile:
+            print >>sys.stderr, "dumping trainprobs to %s" % self.__trainprobsfile
+            probs = self.__trainVotes.getProbs()
+            fp = open( self.__trainprobsfile, 'w' )
+            for ps in probs:
+                print >>fp, ' '.join( [ "%.6f" % p for p in ps ] )
+            fp.close()
 
 
     def __bag( self, data, boostWeights ):
@@ -264,16 +274,16 @@ class Trainer:
         #print >>sys.stderr, "    test    AUC:                %f" % auc
 
         lift = self.__getLift( trainProbs, self.__trainData )
-        print >>sys.stderr,     "    train        lift:             %f" % lift
+        print >>sys.stderr,     "  train    lift:       %f" % lift
         for i, ( testData, testProbs ) in enumerate( izip( self.__testData, allTestProbs ) ):
             lift = self.__getLift( testProbs,    testData )
-            print >>sys.stderr, "    test %3d lift:             %f" % (i+1,lift)
+            print >>sys.stderr, "  test %3d lift:       %f" % (i+1,lift)
 
         er = self.__getErrorRate( trainProbs, self.__trainData )
-        print >>sys.stderr,     "    train        error rate: %f" % er
+        print >>sys.stderr,     "  train    error rate: %f" % er
         for i, ( testData, testProbs ) in enumerate( izip( self.__testData, allTestProbs ) ):
             er = self.__getErrorRate( testProbs, testData )
-            print >>sys.stderr, "    test %3d error rate: %f" % (i+1,er)
+            print >>sys.stderr, "  test %3d error rate: %f" % (i+1,er)
 
 
     def __getLift( self, allprobs, data ):

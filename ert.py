@@ -89,20 +89,20 @@ def main(argv=None):
             raise Usage(msg)
 
         verbose     = False
-        trainfile = None
+        trainfile   = None
         testfile    = None
-        probsfile = None
+        probsfile   = None
         entropy     = 1
         booster     = NoBoost
         maxDepth    = 1000
         bagging     = None
         leafsize    = 30.0
         features    = None
-        trainprobsfile    = None
-        dumpProbsEach     = None
-        modelCount            = 1
-        modelClass            = Tree
-        treesplit             = 'entropy'
+        trainprobsfile  = None
+        dumpProbsEach   = None
+        modelCount      = 1
+        modelClass      = Tree
+        treesplit       = 'entropy'
         featuresampling = NoFeatureSampler()
         crossvalidation = None
         # option processing
@@ -115,7 +115,7 @@ def main(argv=None):
                 trainfile = value
             if option in ("-T", "--test"):
                 testfile = value.split( ',' )
-            if option in ("--probs"):
+            if option in ("--probs",):
                 probsfile = value.split( ',' )
             if option in ("-e", "--entropy", "--ent"):
                 entropy = int( value )
@@ -124,11 +124,11 @@ def main(argv=None):
             if option in ("--model"):
                 if value in ("tree", "ert"):
                     modelClass = Tree
-                if value in ("forest"):
+                if value in ("forest",):
                     modelClass = Forest
-            if option in ("--forestsize"):
+            if option in ("--forestsize",):
                 Forest.size = int( value )
-            if option in ("--boost"):
+            if option in ("--boost",):
                 if value == "none":
                     booster = NoBoost
                 elif value == "ada":
@@ -139,9 +139,9 @@ def main(argv=None):
                     booster = SoftRankBoost
                 else:
                     raise Usage( "unknown booster '%s'" % value )
-            if option in ("--bagging"):
+            if option in ("--bagging",):
                 bagging = float( value )
-            if option in ("--leafsize"):
+            if option in ("--leafsize",):
                 leafsize = float( value )
             if option in ("-d", "--maxdepth"):
                 maxDepth = int( value )
@@ -159,9 +159,9 @@ def main(argv=None):
                     featuresampling = RandomFeatureSampler( int( value ) )
             if option in ("--cv", "--crossvalidation"):
                 crossvalidation = int( value )
-            if option in ("--features"):
+            if option in ("--features",):
                 features = map( int, value.split(',') )
-            if option in ("--trainprobs"):
+            if option in ("--trainprobs",):
                 trainprobsfile = value
 
         if not trainfile:
