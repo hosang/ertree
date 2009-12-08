@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # encoding: utf-8
 """
 Boosters.py is part of ertree an implementation of randomized trees.
@@ -37,7 +36,7 @@ class SoftRankBoost:
         self.__weights = [ p if c == 1 else n for c,f in data ]
 
         self.__gammaHat = -2        # minus infinity
-        self.__delta        = 0.5     # SoftRankBoost.delta
+        self.__delta    = 0.5       # SoftRankBoost.delta
         self.__alphaSum = 0.0
 
     def getWeights( self ):

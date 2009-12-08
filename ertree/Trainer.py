@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # encoding: utf-8
 """
 Trainer.py is part of ertree an implementation of randomized trees.
@@ -28,7 +27,7 @@ from itertools import izip, imap, count
 from collections import defaultdict
 
 from Boosters import NoBoost
-from FeatureSampler import NoFeatureSampler
+from FeatureSamplers import NoFeatureSampler
 
 def myOpen(fn, mode):
     if fn.endswith('.gz'):

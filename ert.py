@@ -25,10 +25,10 @@ Created by jan on 2009-06-04.
 import sys
 import getopt
 
-from Trainer import Trainer
-from Boosters import *
-from Models import *
-from FeatureSampler import *
+from ertree.Trainer import Trainer
+from ertree.Boosters import NoBoost, AdaBoost, LiftBoost, SoftRankBoost
+from ertree.Models import Tree, Forest
+from ertree.FeatureSamplers import NoFeatureSampler, HillClimbingFeatureSampler, RandomFeatureSampler
 
 help_message = '''
 ertree  Copyright (C) 2009  Jan Hosang

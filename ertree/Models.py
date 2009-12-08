@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # encoding: utf-8
 """
 Models.py is part of ertree an implementation of randomized trees.

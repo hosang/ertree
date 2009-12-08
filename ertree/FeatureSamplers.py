@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # encoding: utf-8
 """
 FeatureSampler.py is part of ertree an implementation of randomized trees.
